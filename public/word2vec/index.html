@@ -6,13 +6,16 @@
 <title>Word2Vec Lab · Nearest Neighbors &amp; 3D Embedding Map | Lead-to-Booked</title>
 <meta name="description" content="Type a word and explore a Word2Vec model trained on 7 million words of classic NLTK corpora: the 10 nearest neighbors, word analogies, and an interactive 3D PCA map of the embedding space.">
 <meta name="theme-color" content="#0B3C5D">
+<meta property="og:image" content="https://leadtobooked.com/og-image.png">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <script>
   try { var th = localStorage.getItem('ltb-theme'); if (th) document.documentElement.setAttribute('data-theme', th); } catch (e) {}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/styles.css">
 <link rel="stylesheet" href="/word2vec/w2v.css">
 <link rel="preload" href="/word2vec/model/vectors.bin" as="fetch" type="application/octet-stream" crossorigin>
@@ -22,9 +25,9 @@
 
 <header class="hdr">
   <div class="hdr-in">
-    <a href="/" class="logo" aria-label="Lead-to-Booked home">
-      <span class="logo-mark" aria-hidden="true"></span>
-      <span class="logo-text">Lead-to-Booked</span>
+    <a href="/" class="logo" aria-label="LeadBeam home">
+      <svg class="logo-lines" viewBox="0 0 22 18" width="22" height="18" aria-hidden="true"><path d="M2 4h11M6 9h14M2 14h11"/></svg>
+      <span class="logo-word">Lead<span class="logo-grad">Beam</span></span>
     </a>
     <nav class="nav desk-only" aria-label="Lab sections">
       <a href="#neighbors">Neighbors</a>

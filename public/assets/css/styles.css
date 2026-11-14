@@ -77,8 +77,14 @@ input[type=range] { accent-color: var(--teal); width: 100%; }
 .hdr-in { max-width: 1440px; margin: 0 auto; height: 72px; padding: 0 var(--gut); display: flex; align-items: center; gap: 28px; }
 .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--head); min-width: 0; }
 .logo:hover { color: var(--head); }
-.logo-mark { flex: none; width: 32px; height: 32px; border-radius: 9px; background: linear-gradient(135deg,#0B3C5D 0%,#14A3A8 45%,#FFB547 75%,#F2545B 100%); }
-.logo-text { font: 600 17px var(--sans); letter-spacing: -.01em; white-space: nowrap; }
+/* LeadBeam wordmark (logo B1): speed lines + "Lead" + gradient "Beam" */
+.logo { gap: 8px; --beam-lines: #14A3A8; }
+[data-theme="dark"] .logo, .foot-brand .logo { --beam-lines: #3CCFCF; }
+.logo-lines { flex: none; width: 22px; height: 18px; }
+.logo-lines path { fill: none; stroke: var(--beam-lines); stroke-width: 2.6; stroke-linecap: round; }
+.logo-word { font: 800 23px/1 var(--sans); letter-spacing: -.03em; white-space: nowrap; color: var(--head); }
+.logo-grad { background: linear-gradient(90deg, #14A3A8 0%, #FF7A45 70%, #F2545B 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.foot-brand .logo-word { color: #fff; font-size: 22px; }
 .nav { display: flex; gap: 26px; flex: 1; }
 .nav a { font: 500 15px var(--sans); color: var(--ink); text-decoration: none; white-space: nowrap; }
 .nav a:hover { color: var(--teal); }
@@ -356,7 +362,6 @@ input[type=range] { accent-color: var(--teal); width: 100%; }
 .foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 36px; }
 .foot-brand { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 14px; }
 .foot-brand .logo { color: #F3F6F9; }
-.foot-brand .logo-mark { width: 30px; height: 30px; border-radius: 8px; background: linear-gradient(135deg,#0E6E8C 0%,#3CCFCF 45%,#FFB547 75%,#F2545B 100%); }
 .foot-brand p { margin: 0; font: 400 14px/1.6 var(--sans); color: #A3B1C2; max-width: 440px; }
 .foot-brand p.contact { color: #F3F6F9; font-weight: 500; }
 .foot-brand p.contact a { color: #F3F6F9; text-decoration: none; }
