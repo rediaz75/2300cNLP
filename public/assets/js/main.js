@@ -5,13 +5,13 @@
   // Strings added for the production build (not in the prototype dictionary).
   var EXTRA = {
     en: {
-      skip: 'Skip to content', faqH: 'FAQ', lab: 'Word2Vec Lab',
+      skip: 'Skip to content', faqH: 'FAQ', lab: 'Word2Vec',
       needFields: 'Please add your name, a valid mobile phone and email.',
       needTime: 'Please pick a day and a time.',
       sendErr: "Sorry, something went wrong sending your request. Please call us at (786) 891-1700 and we'll book you right away."
     },
     es: {
-      skip: 'Ir al contenido', faqH: 'Preguntas frecuentes', lab: 'Lab Word2Vec',
+      skip: 'Ir al contenido', faqH: 'Preguntas frecuentes', lab: 'Word2Vec',
       needFields: 'Por favor escribe tu nombre, un celular y un email válidos.',
       needTime: 'Por favor escoge un día y un horario.',
       sendErr: 'Lo sentimos, algo salió mal al enviar tu solicitud. Llámanos al (786) 891-1700 y te agendamos enseguida.'
