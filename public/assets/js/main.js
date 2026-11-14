@@ -5,13 +5,13 @@
   // Strings added for the production build (not in the prototype dictionary).
   var EXTRA = {
     en: {
-      skip: 'Skip to content', faqH: 'FAQ',
+      skip: 'Skip to content', faqH: 'FAQ', lab: 'Word2Vec Lab',
       needFields: 'Please add your name, a valid mobile phone and email.',
       needTime: 'Please pick a day and a time.',
       sendErr: "Sorry, something went wrong sending your request. Please call us at (786) 891-1700 and we'll book you right away."
     },
     es: {
-      skip: 'Ir al contenido', faqH: 'Preguntas frecuentes',
+      skip: 'Ir al contenido', faqH: 'Preguntas frecuentes', lab: 'Lab Word2Vec',
       needFields: 'Por favor escribe tu nombre, un celular y un email válidos.',
       needTime: 'Por favor escoge un día y un horario.',
       sendErr: 'Lo sentimos, algo salió mal al enviar tu solicitud. Llámanos al (786) 891-1700 y te agendamos enseguida.'
@@ -67,7 +67,8 @@
   /* ---------------- Lists ---------------- */
   function renderLists() {
     var d = t();
-    fill('nav', d.nav.map(function (label, i) { return '<a href="#' + ANCHORS[i] + '">' + esc(label) + '</a>'; }).join(''));
+    fill('nav', d.nav.map(function (label, i) { return '<a href="#' + ANCHORS[i] + '">' + esc(label) + '</a>'; }).join('') +
+      '<a href="/word2vec/" class="nav-lab">' + esc(d.lab) + '</a>');
     fill('guar', d.guar.map(function (g) { return '<div><span class="tick" aria-hidden="true">✓</span>' + esc(g) + '</div>'; }).join(''));
     fill('guarRow', d.guar.map(function (g) { return '<span>✓ ' + esc(g) + '</span>'; }).join(''));
     fill('pains', d.pains.map(function (p) {
@@ -114,7 +115,7 @@
         var href = (footHref[ci] && footHref[ci][ii]) || '#';
         var attr = href === '#audit' ? ' href="#" data-open-modal' : ' href="' + href + '"';
         return '<a' + attr + '>' + esc(it) + '</a>';
-      }).join('') + '</div>';
+      }).join('') + (ci === 2 ? '<a href="/word2vec/">' + esc(d.lab) + '</a>' : '') + '</div>';
     }).join(''));
   }
 
@@ -391,7 +392,7 @@
     }
   });
 
-  window.addEventListener('resize', function () { if (state.menu && window.innerWidth > 1180) setMenu(false); });
+  window.addEventListener('resize', function () { if (state.menu && window.innerWidth > 1260) setMenu(false); });
 
   /* ---------------- Boot ---------------- */
   setTheme(state.theme);

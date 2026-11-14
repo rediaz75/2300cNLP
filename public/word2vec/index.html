@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Word2Vec Lab · Nearest Neighbors &amp; 3D Embedding Map | Lead-to-Booked</title>
+<meta name="description" content="Type a word and explore a Word2Vec model trained on 7 million words of classic NLTK corpora: the 10 nearest neighbors, word analogies, and an interactive 3D PCA map of the embedding space.">
+<meta name="theme-color" content="#0B3C5D">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script>
+  try { var th = localStorage.getItem('ltb-theme'); if (th) document.documentElement.setAttribute('data-theme', th); } catch (e) {}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/styles.css">
+<link rel="stylesheet" href="/word2vec/w2v.css">
+<link rel="preload" href="/word2vec/model/vectors.bin" as="fetch" type="application/octet-stream" crossorigin>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="hdr">
+  <div class="hdr-in">
+    <a href="/" class="logo" aria-label="Lead-to-Booked home">
+      <span class="logo-mark" aria-hidden="true"></span>
+      <span class="logo-text">Lead-to-Booked</span>
+    </a>
+    <nav class="nav desk-only" aria-label="Lab sections">
+      <a href="#neighbors">Neighbors</a>
+      <a href="#map">3D Map</a>
+      <a href="#analogy">Analogies</a>
+      <a href="#model">The Model</a>
+    </nav>
+    <div class="hdr-actions desk-only">
+      <button type="button" class="icon-btn" data-toggle-theme aria-label="Toggle dark mode"><span data-theme-icon>☾</span></button>
+      <a href="/" class="btn btn-outline">← Back to site</a>
+    </div>
+    <div class="hdr-spacer mob-only"></div>
+    <button type="button" class="mob-ctl mob-only" data-toggle-theme aria-label="Toggle dark mode"><span data-theme-icon>☾</span></button>
+    <a href="/" class="mob-ctl mob-only">← Site</a>
+  </div>
+</header>
+
+<main id="main">
+<!-- ============ Intro + search ============ -->
+<section class="hero w2v-hero" id="neighbors">
+  <div class="w2v-wrap">
+    <div class="w2v-intro">
+      <span class="badge"><span class="w2v-dot" aria-hidden="true"></span>NLP Lab · Word Embeddings</span>
+      <h1>Explore a Trained Word2Vec Model</h1>
+      <p class="hero-sub">Type a word to see the 10 words the model thinks are closest in meaning, then spin the 3D map to see how they cluster. The model was trained on <b data-meta="tokens">7.2 million</b> words of classic NLTK corpora.</p>
+    </div>
+
+    <form class="card w2v-search" id="search-form" autocomplete="off" role="search">
+      <label for="q" class="w2v-label">Word(s) <span>· separate up to 4 words with commas to compare them</span></label>
+      <div class="w2v-input-row">
+        <div class="w2v-combo">
+          <input id="q" name="q" type="text" inputmode="text" spellcheck="false" placeholder="e.g. france" aria-autocomplete="list" aria-controls="suggest" aria-expanded="false" disabled>
+          <ul id="suggest" class="w2v-suggest" role="listbox" hidden></ul>
+        </div>
+        <button type="submit" class="btn btn-cta btn-lg" id="go" disabled>Find 10 closest</button>
+      </div>
+      <div class="w2v-chips" aria-label="Examples">
+        <span>Try:</span>
+        <button type="button" data-try="france">france</button>
+        <button type="button" data-try="film">film</button>
+        <button type="button" data-try="oil">oil</button>
+        <button type="button" data-try="happy">happy</button>
+        <button type="button" data-try="monday">monday</button>
+        <button type="button" data-try="computer">computer</button>
+        <button type="button" data-try="car, money, war">car, money, war</button>
+        <button type="button" data-try="king">king</button>
+      </div>
+      <p class="w2v-status" id="status" role="status" aria-live="polite">Loading model…</p>
+    </form>
+  </div>
+</section>
+
+<!-- ============ Results ============ -->
+<section class="section w2v-results-sec" aria-labelledby="res-h">
+  <div class="w2v-wrap">
+    <h2 class="sr-only" id="res-h">Nearest neighbors</h2>
+    <div class="w2v-results" id="results"></div>
+  </div>
+</section>
+
+<!-- ============ 3D map ============ -->
+<section class="section bg-alt" id="map">
+  <div class="w2v-wrap">
+    <div class="w2v-sec-head">
+      <div>
+        <div class="eyebrow">3D Embedding Map</div>
+        <h2 class="h2">See the Neighborhood in Three Dimensions</h2>
+      </div>
+      <p class="w2v-sec-sub">Each word is a 100-dimension vector. We run <b>PCA</b> on the query words and their neighbors and keep the 3 directions with the most variance. Drag to rotate, scroll to zoom, hover a point for its similarity.</p>
+    </div>
+    <div class="card w2v-plot-card">
+      <div class="w2v-plot-bar">
+        <div class="w2v-legend" id="legend"></div>
+        <div class="w2v-toggles">
+          <label><input type="checkbox" id="opt-labels" checked> Labels</label>
+          <label><input type="checkbox" id="opt-lines" checked> Lines to query</label>
+          <label><input type="checkbox" id="opt-context"> Context words</label>
+        </div>
+      </div>
+      <div id="plot" class="w2v-plot" role="img" aria-label="3D scatter plot of the query words and their nearest neighbors"></div>
+      <div class="w2v-plot-foot" id="plot-foot">Search for a word to draw the map.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Analogies ============ -->
+<section class="section" id="analogy">
+  <div class="w2v-wrap w2v-split">
+    <div class="stack">
+      <div class="eyebrow">Vector Arithmetic</div>
+      <h2 class="h2">Word Analogies</h2>
+      <p class="p17">Word2Vec famously encodes relationships as directions. <b>A − B + C</b> finds the word whose vector is closest to that sum: "A is to B as <i>?</i> is to C."</p>
+      <p class="p17 w2v-mute">This is a small model trained on 7M words, not the 100B-word Google News set, so analogies work best with common words. Try <i>king − man + woman</i>, <i>france − paris + tokyo</i>, or <i>good − better + bad</i>.</p>
+    </div>
+    <form class="card w2v-analogy" id="analogy-form" autocomplete="off">
+      <div class="w2v-eq">
+        <input type="text" id="a1" aria-label="Word A" value="king" spellcheck="false">
+        <span aria-hidden="true">−</span>
+        <input type="text" id="a2" aria-label="Word B (subtract)" value="man" spellcheck="false">
+        <span aria-hidden="true">+</span>
+        <input type="text" id="a3" aria-label="Word C (add)" value="woman" spellcheck="false">
+      </div>
+      <button type="submit" class="btn btn-cta" id="a-go" disabled>Solve analogy</button>
+      <div id="a-out" class="w2v-a-out" aria-live="polite"></div>
+      <div class="w2v-chips">
+        <span>Try:</span>
+        <button type="button" data-analogy="king,man,woman">king − man + woman</button>
+        <button type="button" data-analogy="france,paris,tokyo">france − paris + tokyo</button>
+        <button type="button" data-analogy="walking,walk,swim">walking − walk + swim</button>
+        <button type="button" data-analogy="bigger,big,small">bigger − big + small</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ============ Model card ============ -->
+<section class="section bg-alt" id="model">
+  <div class="w2v-wrap">
+    <div class="w2v-sec-head">
+      <div>
+        <div class="eyebrow">Model Card</div>
+        <h2 class="h2">How This Model Was Trained</h2>
+      </div>
+    </div>
+    <div class="w2v-cards">
+      <div class="card w2v-stat"><b data-meta="tokens">–</b><span>training tokens</span></div>
+      <div class="card w2v-stat"><b data-meta="full_vocab">–</b><span>words learned (min count 5)</span></div>
+      <div class="card w2v-stat"><b data-meta="words">–</b><span>most frequent words searchable here</span></div>
+      <div class="card w2v-stat"><b data-meta="dim">–</b><span>dimensions per word</span></div>
+    </div>
+    <div class="w2v-split w2v-model-split">
+      <div class="card w2v-box">
+        <h3>Training corpora (NLTK)</h3>
+        <table class="w2v-table" id="corpora"><tbody></tbody></table>
+      </div>
+      <div class="card w2v-box">
+        <h3>Settings</h3>
+        <table class="w2v-table" id="params"><tbody></tbody></table>
+        <p class="w2v-mute w2v-small">Trained with <code>training/train_word2vec.py</code> in this repo. Rerun it to retrain or change the hyperparameters.</p>
+      </div>
+    </div>
+    <div class="w2v-explain">
+      <div class="card w2v-box">
+        <h3>1 · Skip-gram</h3>
+        <p>For every word in the corpus, the network learns to predict the words within 5 positions of it. Words that appear in similar contexts end up with similar vectors.</p>
+      </div>
+      <div class="card w2v-box">
+        <h3>2 · Cosine similarity</h3>
+        <p>Every vector is normalized to length 1, so similarity = dot product = cos θ. The "10 closest" are the 10 highest cosines out of 20,000 words, computed live in your browser.</p>
+      </div>
+      <div class="card w2v-box">
+        <h3>3 · PCA to 3D</h3>
+        <p>100 dimensions can't be drawn, so the map projects the plotted words onto their top 3 principal components. Distances in 3D are approximate; the table shows the true cosine scores.</p>
+      </div>
+      <div class="card w2v-box">
+        <h3>4 · Corpus bias</h3>
+        <p>A model only knows its training text. Gutenberg includes the King James Bible, so <i>king</i> sits near biblical kings, and Reuters makes <i>money</i> sound like a central banker.</p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-bot">© <span data-year>2026</span> Lead-to-Booked · Word2Vec Lab · <a href="/" style="color:#3CCFCF">Back to the main site</a> · 3D charts by <a href="https://plotly.com/javascript/" style="color:#A3B1C2">plotly.js</a> (MIT)</div>
+  </div>
+</footer>
+
+<script src="/word2vec/vendor/plotly-gl3d.min.js" defer></script>
+<script src="/word2vec/w2v.js" defer></script>
+</body>
+</html>

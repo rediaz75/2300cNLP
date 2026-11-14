@@ -12,8 +12,36 @@ public/                 ← Netlify publish directory
   assets/css/styles.css
   assets/js/i18n.js     ← all English / Spanish copy
   assets/js/main.js     ← language & theme toggles, calculator, demo, booking modal
+  word2vec/             ← Word2Vec Lab page  →  /word2vec/
+    index.html, w2v.css, w2v.js
+    model/              ← trained vectors (vocab.json, vectors.bin, meta.json)
+    vendor/             ← plotly.js gl3d build (MIT), self-hosted
+training/
+  train_word2vec.py     ← trains the model and exports it to public/word2vec/model/
+  requirements.txt
 netlify.toml            ← publish dir + security headers
 ```
+
+## Word2Vec Lab (`/word2vec/`)
+
+An NLP class demo linked from the main nav ("Word2Vec Lab") and footer.
+
+- **Model:** gensim Word2Vec, skip-gram with negative sampling, 100 dimensions, window ±5, 15 epochs,
+  trained on 7.2M tokens of NLTK corpora (Brown, Gutenberg, Reuters, Web text, Inaugural, ABC, State of the Union, Movie reviews).
+  The 20,000 most frequent words are shipped to the browser as int8 vectors (2 MB).
+- **Nearest neighbors:** type a word (or up to 4, comma-separated) and see the 10 closest words by cosine similarity,
+  computed in the browser. Results are shareable: `/word2vec/?w=car,money,war`.
+- **3D map:** PCA projects the query words and their neighbors from 100-D to 3-D (plotly.js). It can also show
+  "context" words (neighbors of neighbors) projected into the same space.
+- **Analogies:** `A − B + C` (e.g. *france − paris + tokyo ≈ japan*).
+
+Retrain (about 3 minutes on 4 cores):
+
+```bash
+pip install -r training/requirements.txt
+python training/train_word2vec.py
+```
+
 
 ## Deploy on Netlify
 

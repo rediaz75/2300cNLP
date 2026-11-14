@@ -1,0 +1,29 @@
+{
+ "dim": 100,
+ "words": 20000,
+ "full_vocab": 39517,
+ "tokens": 7177032,
+ "sentences": 340632,
+ "corpora": {
+  "brown": 1008871,
+  "gutenberg": 2108527,
+  "reuters": 1316635,
+  "webtext": 292254,
+  "inaugural": 140894,
+  "abc": 661696,
+  "state_union": 348158,
+  "movie_reviews": 1299997
+ },
+ "params": {
+  "vector_size": 100,
+  "window": 5,
+  "min_count": 5,
+  "sg": 1,
+  "negative": 10,
+  "sample": 0.0001,
+  "epochs": 15
+ },
+ "algorithm": "skip-gram with negative sampling (gensim 4.4.0)",
+ "quantization": "int8, rows L2-normalised x 127",
+ "trained": "2026-11-14"
+}
