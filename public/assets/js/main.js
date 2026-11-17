@@ -103,16 +103,18 @@
     renderFaq();
     fill('trust', d.trust.map(function (x) { return '<div><i aria-hidden="true">✓</i><span>' + esc(x) + '</span></div>'; }).join(''));
     fill('finalTrust', d.finalTrust.map(function (x) { return '<span>' + esc(x) + '</span>'; }).join(''));
-    // Footer links: map known items to on-page anchors; the rest stay placeholders until those pages exist.
+    // Footer: items that point at a real section of this page are links; the rest (industries,
+    // legal pages, client login) are plain text until those pages exist.
     var footHref = [
       ['#how', '#how', '#how', '#how', '#how', '#pricing'],
-      ['#top', '#top', '#top', '#top', '#top'],
-      ['#about', '#audit', '#faq', 'mailto:ramon@leadtobooked.com', '#'],
-      ['#', '#', '#', '#', '#']
+      [null, null, null, null, null],
+      ['#about', '#audit', '#faq', 'mailto:ramon@leadbeam.com', null],
+      [null, null, null, null, null]
     ];
     fill('footCols', d.footCols.map(function (c, ci) {
       return '<div class="foot-col"><h4>' + esc(c.h) + '</h4>' + c.items.map(function (it, ii) {
-        var href = (footHref[ci] && footHref[ci][ii]) || '#';
+        var href = footHref[ci] && footHref[ci][ii];
+        if (!href) return '<span>' + esc(it) + '</span>';
         var attr = href === '#audit' ? ' href="#" data-open-modal' : ' href="' + href + '"';
         return '<a' + attr + '>' + esc(it) + '</a>';
       }).join('') + (ci === 2 ? '<a href="/word2vec/">' + esc(d.lab) + '</a>' : '') + '</div>';
