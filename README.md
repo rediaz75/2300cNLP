@@ -65,6 +65,5 @@ All text lives in `public/assets/js/i18n.js` (`en` and `es`). The English string
 ## Still to fill in before launch
 
 - Walkthrough video (placeholder in the "See It Work" section)
-- `[X] years` in the founder bio (`bio` in i18n.js)
 - Links for Privacy Policy, Terms, SMS Terms, Cookie Policy, Accessibility, Client Login, and "See my past web work". These are currently `#`. **The Privacy Policy and SMS Terms are needed for A2P 10DLC texting registration.**
 - The brand is now **LeadBeam**, but the domain and email still use `leadtobooked.com`. When the new domain is ready, update the canonical, `og:url`, `og:image` and `twitter:image` URLs in `public/index.html` (and `og:image` in `public/word2vec/index.html`), plus the email address.
